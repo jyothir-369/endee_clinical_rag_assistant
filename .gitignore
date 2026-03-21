@@ -1,32 +1,29 @@
+# Clinical RAG Assistant
 
-# Ignore build directory
-build/
-# Ignore build like directory
-build*/
-# Ignore all files in the build directory
-build/*
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Ignore tests build directory
-tests/build/
-tests/build*/
+# Environment
+.env
+.venv/
+venv/
+env/
 
-# Test binaries
-tests/**/ndd_filter_test
+# Logs
+logs/
 
-# macOS debug symbols
-*.dSYM/
-
-# Sometimes data files are created for tetsing
-data/
-data/*
-
-# VS Code directory
+# IDE
 .vscode/
-.vscode/*
+.idea/
 
-# Frontend
-frontend/
-frontend/*
-
-# DS Store
+# OS
 .DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+
+# Evaluation results
+evaluation/results.json

@@ -1,0 +1,31 @@
+=== create_index __doc__ ===
+
+        Create a new vector index.
+
+        Args:
+            name: Index name (alphanumeric and underscores only, max length
+                defined by MAX_INDEX_NAME_LENGTH_ALLOWED)
+            dimension: Vector dimensionality (max MAX_DIMENSION_ALLOWED)
+            space_type: Distance metric ('cosine', 'euclidean', 'ip', etc.)
+            M: HNSW parameter - number of bi-directional links per node.
+                Higher values improve recall but increase memory usage.
+                Default: DEFAULT_M
+            ef_con: HNSW construction parameter - size of dynamic candidate list.
+                Higher values improve index quality but slow construction.
+                Default: DEFAULT_EF_CON
+            precision: Vector precision type (Precision.BINARY2,
+                Precision.INT8, Precision.INT16, Precision.FLOAT16,
+                Precision.FLOAT32). Default: Precision.INT16
+            version: API version (optional, uses client version if not specified)
+            sparse_model: Sparse index mode. Use "default" to enable sparse
+                search without IDF, "endee_bm25" to use
+                endee_bm25_server_idf, or omit/"None" for dense-only indexes.
+
+        Returns:
+            str: Success message
+
+        Raises:
+            ValueError: If parameters are invalid
+            HTTPError: If API request fails
+        
+Error: Endee.create_index() missing 2 required positional arguments: 'dimension' and 'space_type'
