@@ -155,25 +155,6 @@ Author
 Jyothir
 
 
----
-
-# ✅ What to Do Now
-
-1. Open your repo on :contentReference[oaicite:1]{index=1}  
-2. Edit `README.md`  
-3. Replace everything with this  
-4. Click **Commit changes**
-
----
-
-# 🚀 After This
-
-👉 Your project becomes:
-- ✅ Professional  
-- ✅ Clear  
-- ✅ High-quality submission  
-
----
 
 If you want next:
 👉 I can review your repo once before submission  
