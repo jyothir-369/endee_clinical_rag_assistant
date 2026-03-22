@@ -84,9 +84,10 @@ Endee acts as the **core vector database** in this system.
 
 ### 1. Clone Repository
 
-```bash
 git clone https://github.com/jyothir-369/endee_clinical_rag_assistant.git
 cd endee_clinical_rag_assistant
+
+
 2. Start Endee Database
 Bashchmod +x ./install.sh ./run.sh
 ./install.sh --release --avx2
