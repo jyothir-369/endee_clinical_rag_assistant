@@ -1,57 +1,180 @@
-# Clinical RAG Assistant using Endee Vector Database
+# Clinical RAG Assistant using Endee
+
+A chatbot that answers clinical questions from uploaded PDFs using Endee vector database and Retrieval-Augmented Generation (RAG).
+
+---
+
+## My Contribution
+
+This project is implemented by me as part of the Endee AI/ML evaluation process.
+
+I extended the base Endee repository and built a complete AI application including:
+
+- Clinical document ingestion pipeline (PDF → text chunks)
+- Embedding generation using transformer models
+- Integration with Endee vector database for semantic search
+- Hybrid retrieval (Dense + BM25 using Reciprocal Rank Fusion)
+- Flask-based chatbot interface
+- Citation-based answer generation from source documents
+
+---
 
 ## Project Overview and Problem Statement
-The volume of medical and clinical data in modern healthcare presents a significant challenge for researchers, administrators, and continuous learners who need to parse through complex PDF guidelines, diagnostic histories, and clinical textbooks efficiently.
 
-The **Clinical RAG Assistant** provides a solution by acting as a Retrieval-Augmented Generation (RAG) chatbot specialized in answering queries based *only* on the clinical documents users upload. This drastically reduces hallucination by grounding an LLM heavily on authenticated source guidelines, mitigating risks in the medical context while returning highly precise, cited answers.
+The volume of medical and clinical data in modern healthcare presents a significant challenge for researchers, administrators, and learners who need to extract relevant insights from large documents quickly.
+
+This project solves that problem by building a Clinical RAG Assistant that answers queries based only on trusted uploaded documents, reducing hallucination and improving reliability.
+
+---
+
+## Solution
+
+The Clinical RAG Assistant:
+
+- Accepts clinical PDF documents
+- Converts them into embeddings
+- Stores them in Endee vector database
+- Retrieves relevant document chunks
+- Generates accurate answers with citations
+
+---
 
 ## System Design and Technical Approach
-This project operates on a robust, locally accessible AI pipeline that heavily utilizes vector embeddings for contextual semantic retrieval:
-1. **Frontend**: A Flask-based web server hosting an interactive chatbot interface where users can drag-and-drop clinical PDFs.
-2. **Ingestion & Chunking**: PDFs are ingested via LangChain's `PyPDFLoader` and logically split using a `RecursiveCharacterTextSplitter`.
-3. **Embeddings**: Sentence embeddings are generated locally utilizing the HuggingFace `all-MiniLM-L6-v2` transformer model directly encoded onto the CPU.
-4. **Hybrid Retrieval**: We implement a powerful Hybrid Retriever utilizing **Reciprocal Rank Fusion (RRF)**. Semantic (dense) search executes through our Vector Database, while keyword (sparse) text searches handle domain-specific medical acronyms via `BM25Okapi`. 
-5. **Generative LLM**: A generative language model accepts the tightly retrieved document chunks alongside the prompt and produces citations directly referring back to the specific chunk's origin PDF and page number algorithmically.
 
-## Explanation of how Endee is used
-Endee (`endee-io/endee`) operates as the **core Vector Database** powering the dense semantic search phase of the application pipeline. 
+This project uses a complete AI pipeline:
 
-### Why Endee?
-Endee manages indexing large arrays of densely-encoded contextual dimensions. Specifically:
-- **Index Management**: When the system starts, it utilizes the native `endee.Endee()` Python client to connect to the Endee vector search engine, requesting the retrieval of `(or creation of)` a high-performance Cosine-distance `clinical_rag` index mapping exactly to 384 dimensions.
-- **Document Ingestion**: Over the ingestion lifecycle, Endee `.add()` seamlessly inserts the user's chunked PDF texts with payload metadata and generated transformer embeddings into the database under isolated UUIDs.
-- **Query Resolution**: At query time, Endee executes an extremely fast top-K nearest-neighbor `.query()` sweep of the dense embeddings generated from the user's question, reliably surfacing the most semantically pertinent text fragments necessary for the LLM context limits.
+### Frontend
+- Flask-based web interface
+- Allows users to upload PDFs and ask questions
+
+### Ingestion & Chunking
+- PDFs processed using LangChain PyPDFLoader
+- Split into chunks using RecursiveCharacterTextSplitter
+
+### Embeddings
+- Generated using HuggingFace model: all-MiniLM-L6-v2
+- Runs locally on CPU
+
+### Hybrid Retrieval
+- Dense search using Endee vector database
+- Sparse search using BM25
+- Combined using Reciprocal Rank Fusion (RRF)
+
+### LLM Generation
+- Uses Groq/OpenAI API
+- Generates answers using retrieved context
+- Provides source-based citations
+
+---
+
+## How Endee is Used
+
+Endee acts as the core vector database in this system.
+
+### Key Roles:
+
+- **Index Management**
+  - Creates and manages a vector index of 384 dimensions
+
+- **Document Storage**
+  - Stores embeddings of document chunks with metadata
+
+- **Query Processing**
+  - Performs fast top-K similarity search using `.query()`
+
+- **Semantic Retrieval**
+  - Returns most relevant chunks for LLM input
+
+---
+
+## Tech Stack
+
+- Python
+- Flask
+- LangChain
+- HuggingFace Transformers
+- Endee Vector Database
+- BM25 (rank-bm25)
+- Groq / OpenAI API
+
+---
 
 ## Setup and Execution Instructions
 
 ### Prerequisites
-1. **Clone the Endee Repository Fork** 
-   You must clone this project from the forked replica of the core `endee-io/endee` repository.
-2. **Start the Endee Database**
-   Since Endee is a C++ natively compiled database, follow its built-in launch scripts before booting the Python API:
-   ```bash
-   chmod +x ./install.sh ./run.sh
-   ./install.sh --release --avx2
-   ./run.sh
-   # Endee listens inherently on port 8080
-   ```
-3. **Environment Tokens**
-   Copy the provided `.env.example` into a local `.env` file and insert your respective Groq or OpenAI API key.
 
-### Installing Dependencies
+Clone this repository:
+
 ```bash
+git clone https://github.com/jyothir-369/endee_clinical_rag_assistant.git
+cd endee_clinical_rag_assistant
+
+Start Endee Database
+chmod +x ./install.sh ./run.sh
+./install.sh --release --avx2
+./run.sh
+
+Endee runs on:
+
+http://localhost:8080
+Setup Environment
+
+Create .env file:
+
+cp .env.example .env
+
+Add your API key:
+
+OPENAI_API_KEY=your_key_here
+Install Dependencies
 pip install -r requirements.txt
-```
+Ingest Documents
 
-### Ingesting Documents
-Place any clinical `.pdf` files you wish to include in your initial corpus into the `/data/` directory, and run:
-```bash
+Place your PDFs inside /data/ folder and run:
+
 python ingest.py
-```
-
-### Running the Assistant
-Once documents are ingested successfully by the Endee database, initiate the user-facing app:
-```bash
+Run the Application
 python app.py
-```
-Open `http://localhost:5000` inside your clinical workstation's web-browser to begin securely questioning your sources.
+
+Open in browser:
+
+http://localhost:5000
+Features
+Semantic search using vector embeddings
+Hybrid retrieval (dense + keyword)
+Clinical document understanding
+Citation-based answers
+Simple web UI for interaction
+Future Improvements
+Add support for more file formats
+Improve UI/UX
+Add user authentication
+Deploy as cloud-based service
+Author
+
+Jyothir
+
+
+---
+
+# ✅ What to Do Now
+
+1. Open your repo on :contentReference[oaicite:1]{index=1}  
+2. Edit `README.md`  
+3. Replace everything with this  
+4. Click **Commit changes**
+
+---
+
+# 🚀 After This
+
+👉 Your project becomes:
+- ✅ Professional  
+- ✅ Clear  
+- ✅ High-quality submission  
+
+---
+
+If you want next:
+👉 I can review your repo once before submission  
+👉 Or help you crack next round 👍
