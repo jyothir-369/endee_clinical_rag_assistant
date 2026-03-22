@@ -153,9 +153,3 @@ Deploy as cloud-based service
 Author
 
 Jyothir
-
-
-
-If you want next:
-👉 I can review your repo once before submission  
-👉 Or help you crack next round 👍
