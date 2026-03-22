@@ -31,39 +31,37 @@ This project solves that problem by building a Clinical RAG Assistant that answe
 
 The Clinical RAG Assistant:
 
-- Accepts clinical PDF documents
-- Converts them into embeddings
-- Stores them in Endee vector database
-- Retrieves relevant document chunks
-- Generates accurate answers with citations
+- Accepts clinical PDF documents  
+- Converts them into embeddings  
+- Stores them in Endee vector database  
+- Retrieves relevant document chunks  
+- Generates accurate answers with citations  
 
 ---
 
 ## System Design and Technical Approach
 
-This project uses a complete AI pipeline:
-
 ### Frontend
-- Flask-based web interface
-- Allows users to upload PDFs and ask questions
+- Flask-based web interface  
+- Allows users to upload PDFs and ask questions  
 
 ### Ingestion & Chunking
-- PDFs processed using LangChain PyPDFLoader
-- Split into chunks using RecursiveCharacterTextSplitter
+- PDFs processed using LangChain PyPDFLoader  
+- Split into chunks using RecursiveCharacterTextSplitter  
 
 ### Embeddings
-- Generated using HuggingFace model: all-MiniLM-L6-v2
-- Runs locally on CPU
+- Generated using HuggingFace model: `all-MiniLM-L6-v2`  
+- Runs locally on CPU  
 
 ### Hybrid Retrieval
-- Dense search using Endee vector database
-- Sparse search using BM25
-- Combined using Reciprocal Rank Fusion (RRF)
+- Dense search using Endee vector database  
+- Sparse search using BM25  
+- Combined using Reciprocal Rank Fusion (RRF)  
 
 ### LLM Generation
-- Uses Groq/OpenAI API
-- Generates answers using retrieved context
-- Provides source-based citations
+- Uses Groq/OpenAI API  
+- Generates answers using retrieved context  
+- Provides source-based citations  
 
 ---
 
@@ -74,41 +72,38 @@ Endee acts as the core vector database in this system.
 ### Key Roles:
 
 - **Index Management**
-  - Creates and manages a vector index of 384 dimensions
+  - Creates and manages a vector index of 384 dimensions  
 
 - **Document Storage**
-  - Stores embeddings of document chunks with metadata
+  - Stores embeddings of document chunks with metadata  
 
 - **Query Processing**
-  - Performs fast top-K similarity search using `.query()`
+  - Performs fast top-K similarity search using `.query()`  
 
 - **Semantic Retrieval**
-  - Returns most relevant chunks for LLM input
+  - Returns most relevant chunks for LLM input  
 
 ---
 
 ## Tech Stack
 
-- Python
-- Flask
-- LangChain
-- HuggingFace Transformers
-- Endee Vector Database
-- BM25 (rank-bm25)
-- Groq / OpenAI API
+- Python  
+- Flask  
+- LangChain  
+- HuggingFace Transformers  
+- Endee Vector Database  
+- BM25 (rank-bm25)  
+- Groq / OpenAI API  
 
 ---
 
 ## Setup and Execution Instructions
 
-### Prerequisites
-
-Clone this repository:
+### Clone Repository
 
 ```bash
 git clone https://github.com/jyothir-369/endee_clinical_rag_assistant.git
 cd endee_clinical_rag_assistant
-
 Start Endee Database
 chmod +x ./install.sh ./run.sh
 ./install.sh --release --avx2
@@ -118,9 +113,6 @@ Endee runs on:
 
 http://localhost:8080
 Setup Environment
-
-Create .env file:
-
 cp .env.example .env
 
 Add your API key:
@@ -144,7 +136,7 @@ Semantic search using vector embeddings
 Hybrid retrieval (dense + keyword)
 Clinical document understanding
 Citation-based answers
-Simple web UI for interaction
+Simple web UI
 Future Improvements
 Add support for more file formats
 Improve UI/UX
